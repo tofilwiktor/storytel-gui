@@ -47,14 +47,14 @@ std::vector<BookEntry> parseEntries(std::string bookshelf) {
             Book p;
             ABook abook;
             BookMark bookmark;
+            std::string imgurl;
             it.at("book").at("name").get_to(p.title);
             it.at("book").at("authorsAsString").get_to(p.author);
             it.at("abook").at("id").get_to(abook.id);
             it.at("abookMark").at("pos").get_to(bookmark.position);
             it.at("abookMark").at("bookId").get_to(bookmark.id);
-
-
-            BookEntry be{abook, bookmark, p};
+            it.at("book").at("cover").get_to(imgurl);
+            BookEntry be{abook, bookmark, p, imgurl};
             bookEntries.push_back(be);
         }
     }

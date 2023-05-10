@@ -20,6 +20,7 @@
 #define CPPHTTPLIB_OPENSSL_SUPPORT
 
 #include "structures.h"
+#include "coverdownloader.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -36,6 +37,7 @@ public:
     std::vector<BookEntry> books;
     void showList();
     void mediaPlayerInit();
+    void initKeyboardShortcuts();
 
 private slots:
     void on_playBtn_clicked();
@@ -46,6 +48,11 @@ private slots:
 
     void on_backBtn_clicked();
 
+    void displayCover();
+
+    void loadImage();
+
+
 private:
     Ui::MainWindow *ui;
     std::string pass;
@@ -55,5 +62,7 @@ private:
     QMediaPlayer *player;
     int idx;
     bool try_login();
+
+    CoverDownloader *cd;
 };
 #endif // MAINWINDOW_H

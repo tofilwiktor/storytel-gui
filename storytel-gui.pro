@@ -10,12 +10,14 @@ QMAKE_LFLAGS += -lssl -lcrypto -lcryptopp
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    coverdownloader.cpp \
     logindialog.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     api_helpers.h \
+    coverdownloader.h \
     httplib.h \
     json.hpp \
     json_fwd.hpp \
@@ -32,3 +34,9 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    darkstyle.qss
+
+RESOURCES += \
+    darkstyle.qrc

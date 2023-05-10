@@ -11,6 +11,8 @@
 #include <QAudioOutput>
 #include <QAudioFormat>
 #include <QAudioDeviceInfo>
+#include <QPixmap>
+#include <QShortcut>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -57,6 +59,9 @@ void MainWindow::showList() {
             newItem->setText(QString::fromStdString(it.book.title));
             ui->listWidget->addItem(newItem);
         }
+
+        connect(ui->listWidget, &QListWidget::currentRowChanged, this, &MainWindow::displayCover);
+
     } else {
         QMessageBox::warning(
             this,
@@ -64,6 +69,19 @@ void MainWindow::showList() {
             tr("Incorrect login information.") );
         this->close();
     }
+}
+
+void MainWindow::displayCover() {
+    this->idx = ui->listWidget->currentRow();
+    const QUrl coverUrl("https://storytel.com"+QString::fromStdString(this->books[this->idx].imgUrl));
+    this->cd = new CoverDownloader(coverUrl, this);
+    connect(this->cd, SIGNAL (downloaded()), this, SLOT(loadImage()));
+}
+
+void MainWindow::loadImage() {
+    QPixmap img;
+    img.loadFromData(this->cd->downloadedData());
+    ui->coverView->setPixmap(img);
 }
 
 void MainWindow::mediaPlayerInit() {
@@ -106,6 +124,15 @@ void MainWindow::on_forwardBtn_clicked()
 void MainWindow::on_backBtn_clicked()
 {
     if (player->state() == QMediaPlayer::PlayingState) player->setPosition(player->position() - 5000);
+
+}
+
+void MainWindow::initKeyboardShortcuts() {
+    QShortcut *shortcut_Fwd = new QShortcut(QKeySequence(Qt::Key_Right), this);
+    QShortcut *shortcut_Back = new QShortcut(QKeySequence(Qt::Key_Left), this);
+
+    QObject::connect(shortcut_Fwd, &QShortcut::activated, this, &MainWindow::on_forwardBtn_clicked);
+    QObject::connect(shortcut_Back, &QShortcut::activated, this, &MainWindow::on_backBtn_clicked);
 
 }
 

@@ -22,6 +22,7 @@ struct BookEntry {
     ABook abook;
     BookMark bookmark;
     Book book;
+    std::string imgUrl;
 };
 
 
